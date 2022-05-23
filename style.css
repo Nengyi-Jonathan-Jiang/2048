@@ -37,7 +37,7 @@ div.tile[data-value$="2"], div.tile[data-value$="8"]{
     animation: pop2 var(--move-speed);
 }
 
-div.tile[data-value="2"]{
+div.tile[data-value="1"]{
 	animation: var(--spawn-speed) spawnTile var(--move-speed) backwards;
 }
 

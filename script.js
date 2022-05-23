@@ -40,7 +40,7 @@ class Tile{
 
 class Grid{
 	/** @param {HTMLElement} container @param {number} size */
-	constructor(container, size = 4){
+	constructor(container, size = 4, fib=false){
 		this.size = size;
 		/** @type {Tile[][]} */
 		this.grid = new Array(size).fill(null).map(i => new Array(size).fill(null));
@@ -48,7 +48,16 @@ class Grid{
 		this.container = container;
 		this.container.classList.add("tiles-container");
 
-		this.container.style.setProperty("--size", size)
+		this.container.style.setProperty("--size", size);
+
+		if(fib){
+			this.reducible = this.reducible_fib;
+			this.reducer = this.reducer_fib;
+		}
+		else{
+			this.reducible = this.reducible_2048;
+			this.reducer = this.reducer_2048;
+		}
 	}
 
 	addRandom(){
@@ -65,9 +74,8 @@ class Grid{
 		);
 
 		let pos = canidates[~~(Math.random() * canidates.length)];
-		let value = 1 + (Math.random() * 1.5) << 1;
 		
-		this.grid[pos[0]][pos[1]] = new Tile(value, ...pos, this.container);	
+		this.grid[pos[0]][pos[1]] = new Tile(1, ...pos, this.container);	
 	}
 
 	get full(){return this.grid.every(i => i.every(j => j !== null))}
@@ -89,7 +97,7 @@ class Grid{
 		let changed = false;
 		this.grid = this._transform(
 			this._transform(this.grid, this.size, direction)
-				.map(i => this.step(i, this.reducible_2048, this.reducer_2048))
+				.map(i => this.step(i, this.reducible, this.reducer))
 				.map(i => [...i, ...new Array(this.size - i.length).fill(null)])
 			, this.size, direction
 		)
@@ -148,9 +156,30 @@ class Grid{
 		b1.delete();
 		return [b2, null];
 	}
+
+	/** @param {Tile} b1 @param {Tile} b2 */
+	reducible_fib(b1, b2){
+		let are_fib = (a,b) => a * b == 1 || a * b > 0 && are_fib(b, a - b);
+		let a = b1.value, b = b2.value;
+		return are_fib(Math.max(a,b), Math.min(a,b));
+	}
+	
+	/** @param {Tile} b1 @param {Tile} b2 */
+	reducer_fib(b1, b2){
+		b2.value += b1.value;
+		b2.merged = b1;
+		b1.delete();
+		return [b2, null];
+	}
 }
 
-let grid = new Grid(document.body, +window.location.hash.substring(1) || 4);
+let hash = window.location.hash.substring(1);
+let fib = false;
+if(hash[0] == 'f'){
+	fib = true;
+	hash = hash.substring(1);
+}
+let grid = new Grid(document.body, +hash || 4, fib);
 
 grid.addRandom();
 
@@ -172,8 +201,6 @@ window.onkeydown = ({key}) => {
 		case "R":
 			grid.reset();
 			break;
-		default:
-			console.log(key);
 	}
 }
 
