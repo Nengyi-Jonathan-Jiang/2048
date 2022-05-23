@@ -173,6 +173,8 @@ class Grid{
 	}
 }
 
+window.onhashchange = _=>window.location.reload();
+
 let hash = window.location.hash.substring(1);
 let fib = false;
 if(hash[0] == 'f'){
