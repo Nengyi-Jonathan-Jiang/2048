@@ -85,13 +85,13 @@ div.tile::after{
 body{
 	--border-radius: 0.25;
 	--padding: 0.05;
-    --w: calc(min(100vw, 100vh) * 0.9);
+    --w: calc(min(100vw, 100vh) * 0.95);
 	--move-speed: .2s;
 	--spawn-speed: .4s;
 
     position: relative;
-    top: calc(var(--w) * .05);
-    left: calc(var(--w) * .05);
+    top: calc(var(--w) * .025);
+    left: calc(var(--w) * .025);
 }
 
 .tiles-container {
@@ -103,4 +103,7 @@ body{
     width: var(--w);
     height: var(--w);
     display: block;
+
+	user-select: none;
+	touch-action: none;
 }

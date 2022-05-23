@@ -150,7 +150,7 @@ class Grid{
 	}
 }
 
-let grid = new Grid(document.body, 8);
+let grid = new Grid(document.body, +window.location.hash.substring(1) || 4);
 
 grid.addRandom();
 
