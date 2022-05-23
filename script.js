@@ -161,7 +161,7 @@ class Grid{
 	reducible_fib(b1, b2){
 		let are_fib = (a,b) => a * b == 1 || a * b > 0 && are_fib(b, a - b);
 		let a = b1.value, b = b2.value;
-		return are_fib(Math.max(a,b), Math.min(a,b));
+		return are_fib(Math.max(a, b), Math.min(a, b));
 	}
 	
 	/** @param {Tile} b1 @param {Tile} b2 */
